@@ -96,7 +96,11 @@ class OrderPaymentController extends PimcoreController
 
             $tokenGenerator = new UniqueTokenGenerator(true);
             $uniqueId = $tokenGenerator->generate(15);
-            $orderNumber = preg_replace('/[^A-Za-z0-9\-_]/', '', str_replace(' ', '_', $order->getOrderNumber())) . '_' . $uniqueId;
+
+            $objectOrderNumber = $order->getOrderNumber();
+            if(empty($objectOrderNumber))
+                $objectOrderNumber = $order->getQuoteNumber();
+            $orderNumber = preg_replace('/[^A-Za-z0-9\-_]/', '', str_replace(' ', '_', $objectOrderNumber)) . '_' . $uniqueId;
 
             /**
              * @var PaymentInterface $payment
